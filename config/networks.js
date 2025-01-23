@@ -1,14 +1,13 @@
 const baseChain = {
-    id: 8453, // Base mainnet chain ID
-    name: "Base",
-    network: "base",
-    rpcUrls: ["https://mainnet.base.org"], // RPC URL for Base mainnet
-    blockExplorerUrls: ["https://basescan.org"], // Base blockchain explorer
+    chainId: 8453, // Base network chain ID
+    chainName: 'Base',
     nativeCurrency: {
-      name: "Ethereum",
-      symbol: "ETH",
+      name: 'Ether',
+      symbol: 'ETH',
       decimals: 18,
     },
+    rpcUrls: ['https://mainnet.base.org'],
+    blockExplorerUrls: ['https://basescan.org'],
   };
   
   export default baseChain;

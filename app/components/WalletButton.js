@@ -1,68 +1,38 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { ethers } from "ethers";
-import baseChain from "../../config/networks";
+import { useState } from 'react';
+import { BrowserProvider } from 'ethers';
+import baseChain from '../config/networks'; // Adjust the path if necessary
 
 const WalletButton = () => {
   const [account, setAccount] = useState(null);
 
   const connectWallet = async () => {
-    if (typeof window.ethereum !== "undefined") {
+    if (typeof window.ethereum !== 'undefined') {
       try {
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const network = await provider.getNetwork();
+        const provider = new BrowserProvider(window.ethereum);
+        const accounts = await provider.send('eth_requestAccounts', []);
+        setAccount(accounts[0]);
 
         // Check if the wallet is on the Base network
-        if (network.chainId !== baseChain.id) {
-          try {
-            // Request to switch network
-            await window.ethereum.request({
-              method: "wallet_switchEthereumChain",
-              params: [{ chainId: ethers.utils.hexValue(baseChain.id) }],
-            });
-          } catch (switchError) {
-            // If the network is not added, add it
-            if (switchError.code === 4902) {
-              await window.ethereum.request({
-                method: "wallet_addEthereumChain",
-                params: [
-                  {
-                    chainId: ethers.utils.hexValue(baseChain.id),
-                    chainName: baseChain.name,
-                    rpcUrls: baseChain.rpcUrls,
-                    blockExplorerUrls: baseChain.blockExplorerUrls,
-                    nativeCurrency: baseChain.nativeCurrency,
-                  },
-                ],
-              });
-            } else {
-              throw switchError;
-            }
-          }
+        const network = await provider.getNetwork();
+        if (network.chainId !== baseChain.chainId) {
+          alert(`Please switch to the Base network in your wallet.`);
         }
-
-        // Connect the wallet and get the account
-        const accounts = await provider.send("eth_requestAccounts", []);
-        setAccount(accounts[0]);
       } catch (error) {
-        console.error("Error connecting wallet:", error);
+        console.error('Error connecting to wallet:', error);
       }
     } else {
-      alert("MetaMask is not installed!");
+      alert('MetaMask is not installed. Please install it to use this feature.');
     }
   };
 
   return (
-    <button
-      onClick={connectWallet}
-      className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
-    >
-      {account
-        ? `Connected: ${account.slice(0, 6)}...${account.slice(-4)}`
-        : "Connect Wallet"}
+    <button onClick={connectWallet} className="bg-blue-500 text-white p-2 rounded">
+      {account ? `Connected: ${account}` : 'Connect Wallet'}
     </button>
   );
 };
 
 export default WalletButton;
+
