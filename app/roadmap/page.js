@@ -1,6 +1,10 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+
 export default function Roadmap() {
+  const router = useRouter();
+
   const roadmap = [
     {
       title: "Phase 1: MVP Development",
@@ -14,6 +18,7 @@ export default function Roadmap() {
         - Blockchain-Audited Earnings Reports: Fully transparent, blockchain-audited reports combat distributor corruption and ensure fair compensation.
         - AI-Generated Honest Film Ratings: Leveraging AI algorithms to provide unbiased ratings based on audience data and box office performance.
         - Unbiased Film Reviews and Ratings: A decentralized platform for reviews, free from traditional industry bias.
+        - Autonomous Film Marketing Service: An innovative, AI-driven marketing platform to create and execute promotional campaigns, streamlining film promotion for indie filmmakers.
       `,
     },
     {
@@ -37,9 +42,22 @@ export default function Roadmap() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-100 text-gray-800 p-8">
+      {/* Back to Home Button */}
+      <div className="mb-8">
+        <button
+          onClick={() => router.push("/")}
+          className="bg-red-600 text-white px-6 py-2 rounded-md shadow-md hover:bg-red-500 transition"
+        >
+          Back to Home
+        </button>
+      </div>
+
+      {/* Roadmap Heading */}
       <h1 className="text-4xl font-extrabold text-red-600 text-center mb-8">
         BoxBot Roadmap
       </h1>
+
+      {/* Roadmap Content */}
       <div className="flex flex-col space-y-8">
         {roadmap.map((phase, index) => (
           <div
