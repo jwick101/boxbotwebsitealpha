@@ -1,8 +1,23 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+
 export default function About() {
+  const router = useRouter();
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-100 text-gray-800 p-8">
+      {/* Back to Home Button */}
+      <div className="mb-8">
+        <button
+          onClick={() => router.push("/")}
+          className="bg-red-600 text-white px-6 py-2 rounded-md shadow-md hover:bg-red-500 transition"
+        >
+          Back to Home
+        </button>
+      </div>
+
+      {/* About Content */}
       <h1 className="text-4xl font-extrabold text-red-600 text-center mb-8">
         About BoxBot
       </h1>

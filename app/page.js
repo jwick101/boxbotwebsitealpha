@@ -16,60 +16,54 @@ export default function Home() {
           height={200}
           className="mb-4 drop-shadow-xl"
         />
-        <h1 className="text-4xl font-extrabold text-red-600 mb-4 drop-shadow-sm">BoxBot</h1>
-        <p className="text-center text-lg max-w-2xl text-gray-700 leading-relaxed">
-          The revolutionary AI-powered and blockchain-driven platform transforming film
-          financing and marketing through tokenized ownership, transparent revenue tracking,
-          and autonomous campaign management.
+        <h1 className="text-4xl font-extrabold text-red-600 mb-4 drop-shadow-sm">
+          Welcome to BoxBot
+        </h1>
+        <p className="text-center text-lg max-w-2xl text-gray-700 leading-relaxed mb-8">
+          Revolutionizing the film industry with cutting-edge AI and blockchain tools.
+          Discover tokenized film ownership, transparent earnings, and autonomous marketing
+          solutions.
         </p>
       </div>
 
+      {/* Buttons Section */}
       <div className="mt-8 space-y-4">
-        <a
-          href="/about"
-          className="block w-64 text-center bg-black text-white font-semibold py-2 rounded-lg hover:bg-red-500 hover:text-white transition-all duration-300 shadow-md hover:shadow-lg"
-        >
-          About
-        </a>
-        <a
-          href="/roadmap"
-          className="block w-64 text-center bg-black text-white font-semibold py-2 rounded-lg hover:bg-red-500 hover:text-white transition-all duration-300 shadow-md hover:shadow-lg"
-        >
-          Roadmap
-        </a>
-        <a
-          href="https://x.com/boxbotai"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="block w-64 text-center bg-black text-white font-semibold py-2 rounded-lg hover:bg-red-500 hover:text-white transition-all duration-300 shadow-md hover:shadow-lg"
-        >
-          BoxBot Industry Data
-        </a>
-        <a
-          href="/marketing"
-          className="block w-64 text-center bg-black text-white font-semibold py-2 rounded-lg hover:bg-red-500 hover:text-white transition-all duration-300 shadow-md hover:shadow-lg"
-        >
-          BoxBot Marketing
-        </a>
-        <a
-          href="/revenue-tracking"
-          className="block w-64 text-center bg-black text-white font-semibold py-2 rounded-lg hover:bg-red-500 hover:text-white transition-all duration-300 shadow-md hover:shadow-lg"
-        >
-          BoxBot Rev Track
-        </a>
-        <a
-          href="/trade-films"
-          className="block w-64 text-center bg-black text-white font-semibold py-2 rounded-lg hover:bg-red-500 hover:text-white transition-all duration-300 shadow-md hover:shadow-lg"
-        >
-          Trade Films
-        </a>
-        <a
-          href="/mint-film"
-          className="block w-64 text-center bg-black text-white font-semibold py-2 rounded-lg hover:bg-red-500 hover:text-white transition-all duration-300 shadow-md hover:shadow-lg"
-        >
-          Mint Film
-        </a>
+        {[
+          { label: 'About', href: '/about' },
+          { label: 'Roadmap', href: '/roadmap' },
+          { label: 'BoxBot Industry Data', href: 'https://x.com/boxbotai', external: true },
+          { label: 'BoxBot Marketing', href: '/marketing' },
+          { label: 'BoxBot Rev Track', href: '/revenue-tracking' },
+          { label: 'Trade Films', href: '/trade-films' },
+          { label: 'Mint Film', href: '/mint-film' },
+        ].map((button, idx) => (
+          <a
+            key={idx}
+            href={button.href}
+            target={button.external ? '_blank' : '_self'}
+            rel={button.external ? 'noopener noreferrer' : ''}
+            className="block w-64 text-center bg-black text-white font-semibold py-2 rounded-lg hover:bg-red-500 hover:text-white transition-all duration-300 shadow-md hover:shadow-lg"
+          >
+            {button.label}
+          </a>
+        ))}
       </div>
+
+      {/* Footer */}
+      <footer className="mt-16 w-full text-center py-4 bg-gray-800 text-white">
+        <div className="flex justify-center space-x-4">
+          <a href="/about" className="hover:underline">
+            About
+          </a>
+          <a href="/roadmap" className="hover:underline">
+            Roadmap
+          </a>
+          <a href="/trade-films" className="hover:underline">
+            Trade Films
+          </a>
+        </div>
+        <p className="text-sm mt-2">© 2025 BoxBot. All rights reserved.</p>
+      </footer>
     </div>
   );
 }
