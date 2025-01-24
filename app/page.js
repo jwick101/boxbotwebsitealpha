@@ -17,15 +17,21 @@ export default function Home() {
           height={200}
           className="mb-8 drop-shadow-lg"
         />
-        <h1 className="text-5xl font-extrabold text-white mb-6 tracking-wide">
-          WELCOME TO BOXBOT
-        </h1>
-        <p className="text-center text-lg max-w-3xl leading-relaxed text-gray-300 mb-10">
-          Revolutionizing the film industry with cutting-edge AI and blockchain tools.
-          Discover tokenized film ownership, transparent earnings, and autonomous marketing
-          solutions.
-        </p>
-      </div>
+       <div className="flex flex-col items-center mt-20 text-center px-4">
+  <Image
+    src="/boxbot-logo.png"
+    alt="BoxBot Logo"
+    width={200}
+    height={200}
+    className="mb-8 drop-shadow-lg"
+  />
+  <h1 className="text-5xl font-extrabold text-white mb-4 leading-tight md:text-6xl">
+    Welcome to BoxBot
+  </h1>
+  <p className="text-lg md:text-xl text-gray-300 max-w-2xl leading-relaxed">
+    Revolutionizing the film industry with cutting-edge AI and blockchain tools. Discover tokenized film ownership, transparent earnings, and autonomous marketing solutions.
+  </p>
+</div>
 
       {/* Buttons Section */}
       <div className="space-y-4">
