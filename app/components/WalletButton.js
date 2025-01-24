@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { BrowserProvider } from 'ethers';
-import baseChain from '../config/networks'; // Adjust the path if necessary
+import baseChain from '../../config/networks';
 
 const WalletButton = () => {
   const [account, setAccount] = useState(null);

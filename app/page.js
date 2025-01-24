@@ -3,23 +3,24 @@ import Image from 'next/image';
 
 export default function Home() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-gray-100 via-white to-gray-100 text-gray-800 font-sans">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-black via-gray-900 to-blue-900 text-gray-200 font-sans">
       <header className="absolute top-4 right-4">
         <WalletButton />
       </header>
 
-      <div className="flex flex-col items-center">
+      {/* Content Section */}
+      <div className="flex flex-col items-center mt-20">
         <Image
           src="/boxbot-logo.png"
           alt="BoxBot Logo"
           width={200}
           height={200}
-          className="mb-4 drop-shadow-xl"
+          className="mb-8 drop-shadow-lg"
         />
-        <h1 className="text-4xl font-extrabold text-red-600 mb-4 drop-shadow-sm">
-          Welcome to BoxBot
+        <h1 className="text-5xl font-extrabold text-white mb-6 tracking-wide">
+          WELCOME TO BOXBOT
         </h1>
-        <p className="text-center text-lg max-w-2xl text-gray-700 leading-relaxed mb-8">
+        <p className="text-center text-lg max-w-3xl leading-relaxed text-gray-300 mb-10">
           Revolutionizing the film industry with cutting-edge AI and blockchain tools.
           Discover tokenized film ownership, transparent earnings, and autonomous marketing
           solutions.
@@ -27,7 +28,7 @@ export default function Home() {
       </div>
 
       {/* Buttons Section */}
-      <div className="mt-8 space-y-4">
+      <div className="space-y-4">
         {[
           { label: 'About', href: '/about' },
           { label: 'Roadmap', href: '/roadmap' },
@@ -42,7 +43,7 @@ export default function Home() {
             href={button.href}
             target={button.external ? '_blank' : '_self'}
             rel={button.external ? 'noopener noreferrer' : ''}
-            className="block w-64 text-center bg-black text-white font-semibold py-2 rounded-lg hover:bg-red-500 hover:text-white transition-all duration-300 shadow-md hover:shadow-lg"
+            className="block w-64 text-center bg-gray-800 text-gray-200 font-semibold py-3 rounded-lg hover:bg-blue-600 hover:shadow-lg hover:text-white transition-all duration-300 shadow-md"
           >
             {button.label}
           </a>
@@ -50,20 +51,32 @@ export default function Home() {
       </div>
 
       {/* Footer */}
-      <footer className="mt-16 w-full text-center py-4 bg-gray-800 text-white">
-        <div className="flex justify-center space-x-4">
-          <a href="/about" className="hover:underline">
-            About
-          </a>
-          <a href="/roadmap" className="hover:underline">
-            Roadmap
-          </a>
-          <a href="/trade-films" className="hover:underline">
-            Trade Films
-          </a>
-        </div>
-        <p className="text-sm mt-2">© 2025 BoxBot. All rights reserved.</p>
-      </footer>
+      <footer className="mt-20 w-full py-6 bg-gray-900 text-gray-300">
+  <div className="flex justify-between items-center px-8">
+    {/* Navigation Links */}
+    <div className="flex space-x-6">
+      <a href="/about" className="hover:text-blue-500">
+        About
+      </a>
+      <a href="/roadmap" className="hover:text-blue-500">
+        Roadmap
+      </a>
+      <a href="/trade-films" className="hover:text-blue-500">
+        Trade Films
+      </a>
+    </div>
+    {/* Base Logo */}
+    <div className="flex items-center">
+      <img
+        src="/baselogo.png"
+        alt="Base Logo"
+        className="w-auto h-12 object-contain"
+      />
+    </div>
+  </div>
+  <p className="text-center text-sm mt-2">© 2025 BoxBot. All rights reserved.</p>
+</footer>
     </div>
   );
 }
+

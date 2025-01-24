@@ -41,19 +41,19 @@ export default function Roadmap() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-100 text-gray-800 p-8">
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-gray-100 p-8">
       {/* Back to Home Button */}
       <div className="mb-8">
         <button
           onClick={() => router.push("/")}
-          className="bg-red-600 text-white px-6 py-2 rounded-md shadow-md hover:bg-red-500 transition"
+          className="bg-blue-600 text-white px-6 py-2 rounded-md shadow-md hover:bg-blue-500 transition"
         >
           Back to Home
         </button>
       </div>
 
       {/* Roadmap Heading */}
-      <h1 className="text-4xl font-extrabold text-red-600 text-center mb-8">
+      <h1 className="text-4xl font-extrabold text-red-500 text-center mb-8">
         BoxBot Roadmap
       </h1>
 
@@ -62,10 +62,14 @@ export default function Roadmap() {
         {roadmap.map((phase, index) => (
           <div
             key={index}
-            className="bg-white rounded-lg shadow-md p-6 border-l-4 border-red-500"
+            className="bg-gray-800 rounded-lg shadow-lg p-6 border-l-4 border-red-500"
           >
-            <h2 className="text-2xl font-bold mb-2">{phase.title}</h2>
-            <p className="text-gray-700 whitespace-pre-line">{phase.description}</p>
+            <h2 className="text-2xl font-bold text-blue-400 mb-2">
+              {phase.title}
+            </h2>
+            <p className="text-gray-300 whitespace-pre-line">
+              {phase.description}
+            </p>
           </div>
         ))}
       </div>
