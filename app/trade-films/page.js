@@ -1,8 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { ethers } from "ethers";
+import { useState } from "react";
+import { motion } from "framer-motion";
+import Image from "next/image";
+import WalletButton from "./components/WalletButton";
+import { Modal, Backdrop, Fade } from "@mui/material";
 
+// Sample film data
 const films = [
   {
     name: "Inception",
@@ -11,7 +15,7 @@ const films = [
     change: "+0.06%",
     genre: "Sci-Fi",
     phase: "Post Production",
-    poster: "/inception.jpg", // Placeholder poster
+    poster: "/inception.jpg",
   },
   {
     name: "Avatar",
@@ -70,30 +74,10 @@ const films = [
 ];
 
 export default function TradeFilmsPage() {
-  const [films, setFilms] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("All");
-  const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
-  const [walletAddress, setWalletAddress] = useState("");
-  const filmsPerPage = 6;
-
-  // Fetch films from API (replace with your API endpoint)
-  useEffect(() => {
-    const fetchFilms = async () => {
-      try {
-        const response = await fetch("/api/films");
-        const data = await response.json();
-        setFilms(data);
-      } catch (error) {
-        console.error("Error fetching films:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchFilms();
-  }, []);
+  const [selectedFilm, setSelectedFilm] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
 
   // Filter films by phase
   const filterFilms = (phase) => {
@@ -102,66 +86,23 @@ export default function TradeFilmsPage() {
       : films.filter((film) => film.phase === phase);
   };
 
-  // Pagination logic
-  const indexOfLastFilm = currentPage * filmsPerPage;
-  const indexOfFirstFilm = indexOfLastFilm - filmsPerPage;
-  const currentFilms = filterFilms(activeTab)
-    .filter((film) =>
-      film.name.toLowerCase().includes(searchQuery.toLowerCase())
-    )
-    .slice(indexOfFirstFilm, indexOfLastFilm);
-
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
-  // Connect wallet
-  const connectWallet = async () => {
-    if (window.ethereum) {
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      await provider.send("eth_requestAccounts", []);
-      const signer = provider.getSigner();
-      const address = await signer.getAddress();
-      setWalletAddress(address);
-    } else {
-      alert("Please install MetaMask!");
-    }
+  // Open film modal
+  const openFilmModal = (film) => {
+    setSelectedFilm(film);
+    setOpenModal(true);
   };
 
-  // Buy film (integrate with your smart contract)
-  const buyFilm = async (filmAddress) => {
-    try {
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
-      const contract = new ethers.Contract(filmAddress, filmTokenABI, signer);
-
-      const tx = await contract.buyFilm({ value: ethers.utils.parseEther("0.1") }); // Replace with actual price
-      await tx.wait();
-      alert("Film purchased successfully!");
-    } catch (error) {
-      console.error("Error buying film:", error);
-    }
+  // Close film modal
+  const closeFilmModal = () => {
+    setOpenModal(false);
   };
-
-  if (loading) {
-    return <div className="text-center text-gray-400">Loading films...</div>;
-  }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-blue-900 text-gray-200 p-4 md:p-8">
-      {/* Navigation */}
-      <div className="flex justify-between mb-8">
-        <button
-          onClick={() => (window.location.href = "/")}
-          className="bg-gray-800 text-white px-4 py-2 rounded-md hover:bg-gray-700 transition text-sm md:text-base"
-        >
-          Return to Home
-        </button>
-        <button
-          onClick={connectWallet}
-          className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-500 transition text-sm md:text-base"
-        >
-          {walletAddress ? `Connected: ${walletAddress.slice(0, 6)}...` : "Connect Wallet"}
-        </button>
-      </div>
+    <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-blue-900 text-gray-200 font-sans p-6">
+      {/* Header with WalletButton */}
+      <header className="absolute top-4 right-4">
+        <WalletButton />
+      </header>
 
       {/* Page Header */}
       <header className="mb-8 text-center">
@@ -173,99 +114,132 @@ export default function TradeFilmsPage() {
         </p>
       </header>
 
-      {/* Search Bar */}
-      <input
-        type="text"
-        placeholder="Search films..."
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-        className="w-full md:w-64 px-4 py-2 bg-gray-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 mb-8"
-      />
+      {/* Filters and Search Bar */}
+      <div className="flex flex-wrap justify-between items-center mb-8">
+        {/* Filters */}
+        <div className="flex space-x-4">
+          <select
+            onChange={(e) => setActiveTab(e.target.value)}
+            className="bg-gray-800 text-white px-4 py-2 rounded-lg"
+          >
+            {["All", "Development", "Production", "Post Production", "Coming Soon", "Released"].map(
+              (phase) => (
+                <option key={phase} value={phase}>
+                  {phase}
+                </option>
+              )
+            )}
+          </select>
+        </div>
 
-      {/* Tabs */}
-      <div className="flex flex-wrap justify-center space-x-2 md:space-x-4 mb-8">
-        {["All", "Development", "Production", "Post Production", "Coming Soon", "Released"].map(
-          (phase) => (
-            <button
-              key={phase}
-              onClick={() => setActiveTab(phase)}
-              className={`px-4 py-2 text-sm md:text-base rounded-md ${
-                activeTab === phase
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-800 text-gray-300 hover:bg-blue-500"
-              } transition`}
-            >
-              {phase}
-            </button>
+        {/* Search Bar */}
+        <input
+          type="text"
+          placeholder="Search films..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full md:w-64 px-4 py-2 bg-gray-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+        />
+      </div>
+
+      {/* Film Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {filterFilms(activeTab)
+          .filter((film) =>
+            film.name.toLowerCase().includes(searchQuery.toLowerCase())
           )
-        )}
+          .map((film, idx) => (
+            <motion.div
+              key={idx}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="bg-gray-800 rounded-lg shadow-lg overflow-hidden cursor-pointer"
+              onClick={() => openFilmModal(film)}
+            >
+              {/* Film Poster */}
+              <div className="w-full h-48 relative">
+                <Image
+                  src={film.poster}
+                  alt={`${film.name} Poster`}
+                  layout="fill"
+                  objectFit="cover"
+                  className="rounded-t-lg"
+                />
+              </div>
+
+              {/* Film Details */}
+              <div className="p-4">
+                <h2 className="text-lg font-bold text-white">{film.name}</h2>
+                <p className="text-sm text-gray-400">{film.genre}</p>
+                <div className="flex justify-between items-center mt-4">
+                  <p className="text-lg font-semibold text-blue-500">{film.marketCap}</p>
+                  <p
+                    className={`text-sm ${
+                      film.change.startsWith("+") ? "text-green-400" : "text-red-400"
+                    }`}
+                  >
+                    {film.change}
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          ))}
       </div>
 
-      {/* Film List */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {currentFilms.map((film, idx) => (
-          <div
-            key={idx}
-            className="flex flex-col p-4 bg-gray-800 rounded-lg shadow-lg"
-          >
-            {/* Poster */}
-            <div className="w-full h-48 mb-4">
-              <img
-                src={film.poster}
-                alt={`${film.name} Poster`}
-                className="w-full h-full object-cover rounded-lg"
-              />
-            </div>
+      {/* Film Modal */}
+      <Modal
+        open={openModal}
+        onClose={closeFilmModal}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{ timeout: 500 }}
+      >
+        <Fade in={openModal}>
+          <div className="bg-gray-800 rounded-lg p-6 max-w-2xl mx-auto my-12">
+            {selectedFilm && (
+              <>
+                <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-6">
+                  {/* Film Poster */}
+                  <div className="w-full md:w-1/3">
+                    <Image
+                      src={selectedFilm.poster}
+                      alt={`${selectedFilm.name} Poster`}
+                      width={300}
+                      height={450}
+                      className="rounded-lg"
+                    />
+                  </div>
 
-            {/* Film Details */}
-            <div className="flex-1">
-              <h2 className="text-lg font-bold">{film.name}</h2>
-              <p className="text-sm text-gray-400">{film.address}</p>
-              <p className="text-sm text-gray-500">{film.genre}</p>
-            </div>
-
-            {/* Market Cap and Change */}
-            <div className="mt-4">
-              <p className="text-lg font-semibold">{film.marketCap}</p>
-              <p
-                className={`text-sm ${
-                  film.change.startsWith("+") ? "text-green-400" : "text-red-400"
-                }`}
-              >
-                {film.change}
-              </p>
-            </div>
-
-            {/* Buy and Sell Buttons */}
-            <div className="flex justify-between mt-4">
-              <button
-                onClick={() => buyFilm(film.address)}
-                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-500 text-sm"
-              >
-                Buy
-              </button>
-              <button className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-500 text-sm">
-                Sell
-              </button>
-            </div>
+                  {/* Film Details */}
+                  <div className="w-full md:w-2/3">
+                    <h2 className="text-2xl font-bold text-white">{selectedFilm.name}</h2>
+                    <p className="text-sm text-gray-400">{selectedFilm.address}</p>
+                    <p className="text-sm text-gray-500">{selectedFilm.genre}</p>
+                    <div className="mt-4">
+                      <p className="text-lg font-semibold">{selectedFilm.marketCap}</p>
+                      <p
+                        className={`text-sm ${
+                          selectedFilm.change.startsWith("+") ? "text-green-400" : "text-red-400"
+                        }`}
+                      >
+                        {selectedFilm.change}
+                      </p>
+                    </div>
+                    <div className="mt-6 space-x-4">
+                      <button className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-500">
+                        Buy
+                      </button>
+                      <button className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-500">
+                        Sell
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
-        ))}
-      </div>
-
-      {/* Pagination */}
-      <div className="flex justify-center mt-8 space-x-2">
-        {Array.from({ length: Math.ceil(filterFilms(activeTab).length / filmsPerPage) }).map((_, idx) => (
-          <button
-            key={idx}
-            onClick={() => paginate(idx + 1)}
-            className={`px-4 py-2 text-sm rounded-md ${
-              currentPage === idx + 1 ? "bg-blue-600 text-white" : "bg-gray-800 text-gray-300 hover:bg-blue-500"
-            }`}
-          >
-            {idx + 1}
-          </button>
-        ))}
-      </div>
+        </Fade>
+      </Modal>
     </div>
   );
 }
