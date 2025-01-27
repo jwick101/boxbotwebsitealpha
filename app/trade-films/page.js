@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import WalletButton from "./components/WalletButton";
+import WalletButton from "../components/WalletButton";
 import { Modal, Backdrop, Fade } from "@mui/material";
 
 // Sample film data
