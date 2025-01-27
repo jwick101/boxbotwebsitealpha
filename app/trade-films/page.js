@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import WalletButton from "../components/WalletButton";
+import WalletButton from "./components/WalletButton";
 import { Modal, Backdrop, Fade } from "@mui/material";
 
 // Sample film data
@@ -100,12 +100,12 @@ export default function TradeFilmsPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-blue-900 text-gray-200 font-sans p-6">
       {/* Header with WalletButton */}
-      <header className="absolute top-4 right-4">
+      <header className="fixed top-4 right-4 z-50">
         <WalletButton />
       </header>
 
       {/* Page Header */}
-      <header className="mb-8 text-center">
+      <header className="mb-8 text-center pt-16">
         <h1 className="text-3xl md:text-4xl font-extrabold text-white">
           Trade Films
         </h1>
@@ -122,7 +122,7 @@ export default function TradeFilmsPage() {
             onChange={(e) => setActiveTab(e.target.value)}
             className="bg-gray-800 text-white px-4 py-2 rounded-lg"
           >
-            {["All", "Development", "Production", "Post Production", "Coming Soon", "Released"].map(
+            {["All", "Development", "Production", "Post Production", "Coming Soon", "Released", "Mint Your Film"].map(
               (phase) => (
                 <option key={phase} value={phase}>
                   {phase}
