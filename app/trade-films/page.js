@@ -97,6 +97,11 @@ export default function TradeFilmsPage() {
     setOpenModal(false);
   };
 
+  // Navigate to Mint Film page
+  const navigateToMintFilm = () => {
+    window.location.href = "/mint-film";
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-blue-900 text-gray-200 font-sans p-6">
       {/* Header with WalletButton */}
@@ -114,7 +119,7 @@ export default function TradeFilmsPage() {
         </p>
       </header>
 
-      {/* Filters and Search Bar */}
+      {/* Filters, Search Bar, and Mint Film Button */}
       <div className="flex flex-wrap justify-between items-center mb-8">
         {/* Filters */}
         <div className="flex space-x-4">
@@ -122,7 +127,7 @@ export default function TradeFilmsPage() {
             onChange={(e) => setActiveTab(e.target.value)}
             className="bg-gray-800 text-white px-4 py-2 rounded-lg"
           >
-            {["All", "Development", "Production", "Post Production", "Coming Soon", "Released", "Mint Your Film"].map(
+            {["All", "Development", "Production", "Post Production", "Coming Soon", "Released"].map(
               (phase) => (
                 <option key={phase} value={phase}>
                   {phase}
@@ -140,6 +145,14 @@ export default function TradeFilmsPage() {
           onChange={(e) => setSearchQuery(e.target.value)}
           className="w-full md:w-64 px-4 py-2 bg-gray-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
         />
+
+        {/* Mint Film Button */}
+        <button
+          onClick={navigateToMintFilm}
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-500 transition-all duration-300"
+        >
+          Mint Your Film
+        </button>
       </div>
 
       {/* Film Grid */}
