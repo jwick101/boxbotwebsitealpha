@@ -1,8 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
-  images: {
-    unoptimized: true,
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.externals = config.externals || {};
+      config.externals['artifacts'] = 'commonjs artifacts';
+    }
+    return config;
   },
 };
 
